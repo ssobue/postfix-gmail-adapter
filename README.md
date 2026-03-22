@@ -75,11 +75,18 @@ gmailapi unix - n n - - pipe
 ```text
 gmailapi unix - n n - - pipe
   flags=Rq user=gmailapi argv=/usr/bin/env
-    BASE_DIR=/path/to/postfix_to_gmail
+    BASE_DIR=/path/to/postfix-to-gmail
     /usr/local/bin/postfix_to_gmail.py
 ```
 
 `user=` には `postfix` は使えません。`pipe(8)` は mail system owner 権限での実行を拒否するため、`gmailapi` のような専用ユーザーを作成し、そのユーザーに token file と client secrets を読めるようにしてください。
+
+```bash
+sudo useradd --system --home /opt/postfix-to-gmail --shell /usr/sbin/nologin gmailapi
+sudo install -d -o gmailapi -g gmailapi /opt/postfix-to-gmail
+sudo chown gmailapi:gmailapi /opt/postfix-to-gmail/credentials.json
+sudo chmod 600 /opt/postfix-to-gmail/credentials.json
+```
 
 `transport_maps`
 
